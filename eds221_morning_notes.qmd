@@ -11,7 +11,7 @@ execute:
 
 ```{r}
 library(tidyverse)
-
+library(palmerpenguins)
 ```
 
 ### `if` Statements
@@ -70,4 +70,88 @@ if (marmot < 0.5) {
   print("This is big")
 }
 ```
+
+```{r}
+#Find the mean and std of chara height grouped by homeworld
+chara_height_hw <- starwars |> group_by(homeworld) |>
+  summarize(mean(height, na.rm = TRUE), 
+            sd(height, na.rm = TRUE))
+
+# Find the max and min flipper sizes/lengths grouped by species and sex
+penguins_summary <- penguins |> 
+  group_by(species, sex) |> 
+  summarize(max_flip_len = max(flipper_length_mm, na.rm = TRUE), 
+            min_flip_len = min(flipper_length_mm, na.rm = TRUE),
+            sample_size = n())
+
+# using across! 
+penguins_sum_species <- penguins |> 
+  group_by(species) |> 
+  summarise(across(where(is.numeric), mean, na.rm = TRUE))
+# across can also accept a vector c() of the names of columns that you want to apply the function(s) on.
+```
+
+### Back to `for` loops
+
+```{r}
+tree_height <- c(1, 2, 6, 10, 14, 17, 20)
+
+for (i in seq_along(tree_height)) {
+  val = tree_height[i] + tree_height[i + 1]
+  print(val)
+}
+```
+
+For loop with a conditional statement
+```{r}
+species_list <- c("dog", "elephant", "goat", "dog", "goat", "dog", "elephant", "goat", "dog")
+
+age_human <- c(3, 10, 5, 7, 3, 5, 18, 10, 12)
+
+# Create an empty vector to save the values in the environment
+animal_ages <- vector(mode = "numeric", 
+                      length = length(age_human))
+
+for (i in seq_along(species_list)) {
+  if (species_list[i] == "dog") {
+    animal_age <- age_human[i] * 7
+  } else if (species_list[i] == "elephant") {
+    animal_age <- age_human[i] * 0.88
+  } else if (species_list[i] == "goat") {
+    animal_age <- age_human[i] * 4.7
+  }
+  animal_ages[i] = animal_age
+}
+# ^ takes the animal_age at each iteration and assigns/populates the animal_ages vector with the age value for each value of i
+```
+
+#### For loops across data frames
+
+```{r}
+mean_mtcars <- vector(mode = "numeric", length = length(mtcars))
+
+for (i in 1:ncol(mtcars)) {
+  mean_val <- mean(mtcars[[i]], na.rm = TRUE)
+  mean_mtcars[i] <- mean_val
+}
+
+mean_mtcars
+```
+
+### Adding Syntatic Sugar
+
+(apply, across, map_df)
+
+```{r}
+# First: apply
+apply(X = mtcars, MARGIN = 2, FUN = mean)
+
+# Purrr functions
+map(.x = mtcars, .f = mean)
+# Returns a LIST of the elements ^^^
+
+map_df(.x = mtcars, .f = mean)
+# ^^^ Returns a data frame
+```
+
 
