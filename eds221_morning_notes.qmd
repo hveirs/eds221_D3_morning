@@ -3,25 +3,71 @@ title: "EDS 221 Morning Notes"
 author: "Hailey Veirs"
 format: html
 editor: visual
+execute: 
+  echo: true
+  warning: false
+  message: false
 ---
 
-## Quarto
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
 ```{r}
-1 + 1
+library(tidyverse)
+
 ```
 
-You can add options to executable code like this
+### `if` Statements
 
 ```{r}
-#| echo: false
-2 * 2
+burrito <- 2.7
+
+if (burrito > 2) {
+  print("I love burritos!")
+}
+
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+```{r}
+my_ships <- c("Millenium Falcon", "X-wing", "Tie Fighter", "Death Star")
+
+str_detect(my_ships, pattern = "r")
+```
+
+### Example of `%in%` operator
+
+```{r}
+tatooine_charas <- starwars |> 
+  filter(homeworld == "Tatooine")
+
+# Use the %in% operator to look for multiple positive matches
+tatooine_naboo_endor <- starwars |> 
+  filter(homeworld %in% c("Tatooine", "Naboo", "Endor"))
+
+# In words: does the variable in homeworld exist IN the vector c("Tatooine", "Naboo", "Endor")
+```
+
+### `if else` Statements
+
+```{r}
+#pika <- 89.1
+pika <- 50.3
+
+if (pika > 60) {
+  print("mega pika!")
+} else {
+  print("normal pika")
+}
+```
+
+```{r}
+#marmot <- 4.5
+#marmot <- 2.8
+marmot <- 0.25
+
+if (marmot < 0.5) {
+  print("This is small")
+} else if (marmot >= 0.5 & marmot < 3){
+  print("This is mid")
+} else {
+  print("This is big")
+}
+```
+
